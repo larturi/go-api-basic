@@ -14,6 +14,9 @@ docker-compose up -d
 
 ```shell
 fresh
+
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 ```
 
 #### Borrar datos del entorno
