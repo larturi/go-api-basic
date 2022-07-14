@@ -33,3 +33,23 @@ func Ping() {
 		panic(err)
 	}
 }
+
+func ExistsTables(tableName string) bool {
+	sql := fmt.Sprintf("SHOW TABLES LIKE '%s'", tableName)
+	rows, err := db.Query(sql)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return rows.Next()
+}
+
+func CreateTable(schemma string, tableName string) {
+	if !ExistsTables(tableName) {
+		_, err := db.Exec(schemma)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+}
