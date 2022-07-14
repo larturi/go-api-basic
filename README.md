@@ -4,7 +4,7 @@
 
 ### 🚀 Quick start
 
-#### Para correr localmente se necesita correr la base de datos mongo con docker
+#### Para correr localmente se necesita correr la base de datos mysql con docker
 
 ```bash
 docker-compose up -d
@@ -13,7 +13,7 @@ docker-compose up -d
 #### Start in development mode
 
 ```shell
-npm run dev 
+fresh
 ```
 
 #### Borrar datos del entorno
