@@ -3,10 +3,10 @@ package models
 import "packages/db"
 
 type User struct {
-	Id       int64
-	Username string
-	Password string
-	Email    string
+	Id       int64  `json:"id"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Email    string `json:"email"`
 }
 
 type Users []User
@@ -35,27 +35,30 @@ func (user *User) insert() {
 	user.Id, _ = result.LastInsertId()
 }
 
-func ListUsers() Users {
+func ListUsers() (Users, error) {
 	sql := "SELECT id, username, password, email FROM users"
 	users := Users{}
-	rows, _ := db.Query(sql)
+	rows, err := db.Query(sql)
 
 	for rows.Next() {
 		user := User{}
 		rows.Scan(&user.Id, &user.Username, &user.Password, &user.Email)
 		users = append(users, user)
 	}
-	return users
+	return users, err
 }
 
-func GetUser(id int) *User {
+func GetUser(id int) (*User, error) {
 	user := NewUser("", "", "")
 	sql := "SELECT id, username, password, email FROM users WHERE id=?"
-	rows, _ := db.Query(sql, id)
-	for rows.Next() {
-		rows.Scan(&user.Id, &user.Username, &user.Password, &user.Email)
+	if rows, err := db.Query(sql, id); err != nil {
+		return nil, err
+	} else {
+		for rows.Next() {
+			rows.Scan(&user.Id, &user.Username, &user.Password, &user.Email)
+		}
+		return user, nil
 	}
-	return user
 }
 
 func (user *User) update() {

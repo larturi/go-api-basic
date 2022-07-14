@@ -1,30 +1,24 @@
 package main
 
 import (
-	"fmt"
-	"packages/db"
-	"packages/models"
+	"log"
+	"net/http"
+	"packages/handlers"
+
+	"github.com/gorilla/mux"
 )
 
 func main() {
-	db.Connect()
-	db.Ping()
+	// Rutas
+	mux := mux.NewRouter()
 
-	db.CreateTable(models.UserSchema, "users")
+	// Endpoints
+	mux.HandleFunc("/api/user/", handlers.GetUsers).Methods("GET")
+	mux.HandleFunc("/api/user/{id:[0-9]+}", handlers.GetUser).Methods("GET")
+	mux.HandleFunc("/api/user/", handlers.CreateUser).Methods("POST")
+	mux.HandleFunc("/api/user/{id:[0-9]+}", handlers.UpdateUser).Methods("PUT")
+	mux.HandleFunc("/api/user/{id:[0-9]+}", handlers.DeleteUser).Methods("DELETE")
 
-	// Crear Users
-	// user := models.CreateUser("Lichi", "123456", "lichi@gmail.com")
-	// fmt.Println(user)
-
-	// Listado de Users
-	users := models.ListUsers()
-	fmt.Println(users)
-
-	// Busco un User por Id
-	user := models.GetUser(2)
-	// Update user
-	user.Username = "Candelaria"
-	fmt.Println(user)
-
-	db.Close()
+	// Server
+	log.Fatal(http.ListenAndServe(":3001", mux))
 }
