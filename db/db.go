@@ -53,3 +53,26 @@ func CreateTable(schemma string, tableName string) {
 		}
 	}
 }
+
+func TruncateTable(tableName string) {
+	sql := fmt.Sprintf("TRUNCATE %s", tableName)
+	db.Exec(sql)
+}
+
+//Polimorfismo a Exec
+func Exec(query string, args ...interface{}) (sql.Result, error) {
+	result, err := db.Exec(query, args...)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return result, err
+}
+
+// Polimorfismo a Query
+func Query(query string, args ...interface{}) (*sql.Rows, error) {
+	rows, err := db.Query(query, args...)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return rows, err
+}
